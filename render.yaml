@@ -1,42 +1,26 @@
-# Render Blueprint for Clozy (Bagisto).
+# Render Blueprint for Clozy (Bagisto) — FREE TIER setup.
 #
-# Deploy: push this repo to GitHub, then in Render dashboard choose
-# "New +" -> "Blueprint" and point it at the repo. Render reads this file
-# and creates all four services below in one go.
+# Render's Free plan has no persistent disks, so this deliberately does NOT
+# self-host MySQL or use a Render disk for uploads — both would lose all
+# data on every restart/redeploy. Instead:
+#   - MySQL: an external free/cheap host you provision separately (see chat
+#     for options). Fill in DB_* below with its connection details.
+#   - File storage: Cloudflare R2 (S3-compatible, free tier) via Laravel's
+#     S3 filesystem driver. Fill in the AWS_*/R2 values below.
+#
+# Only one service (clozy-web) is defined — no worker or cron job. Free
+# background workers/cron on Render aren't a good fit for a low-traffic
+# free deployment, so mail is sent synchronously (QUEUE_CONNECTION=sync)
+# and Laravel's scheduler is skipped for now. Revisit both once this is
+# running on a paid plan.
 #
 # NOTE: Render's Blueprint schema does evolve — if the dashboard flags a
 # field here as invalid, check https://render.com/docs/blueprint-spec for
-# the current key name and adjust (the shape of what each service needs
-# won't have changed, just possibly the exact YAML key).
+# the current key name.
 
 databases: []
 
 services:
-  # ---------------------------------------------------------------------
-  # MySQL — Render has no managed MySQL product, so this runs the
-  # official mysql:8.0 image as a private service (no public network
-  # exposure), with its own persistent disk for /var/lib/mysql.
-  # ---------------------------------------------------------------------
-  - type: pserv
-    name: clozy-mysql
-    env: docker
-    image:
-      url: docker.io/library/mysql:8.0
-    plan: starter
-    disk:
-      name: clozy-mysql-data
-      mountPath: /var/lib/mysql
-      sizeGB: 5
-    envVars:
-      - key: MYSQL_ROOT_PASSWORD
-        generateValue: true
-      - key: MYSQL_DATABASE
-        value: clozy
-      - key: MYSQL_USER
-        value: clozy
-      - key: MYSQL_PASSWORD
-        generateValue: true
-
   # ---------------------------------------------------------------------
   # Web — the storefront + admin panel (Nginx + PHP-FPM in one container)
   # ---------------------------------------------------------------------
@@ -45,13 +29,14 @@ services:
     env: docker
     dockerfilePath: docker/render/Dockerfile
     dockerContext: .
-    plan: starter
+    plan: free
     healthCheckPath: /health
-    disk:
-      name: clozy-storage
-      mountPath: /var/www/html/storage/app/public
-      sizeGB: 5
-    preDeployCommand: php artisan migrate --force
+    # First deploy: runs the full unattended installer (migrates, seeds
+    # base config, creates the default admin user). Every deploy after
+    # that: the installer is skipped (an admin already exists) and this
+    # just runs a safe `migrate --force` instead. See
+    # app/Console/Commands/EnsureInstalled.php.
+    preDeployCommand: php artisan bagisto:ensure-installed
     envVars:
       - key: APP_NAME
         value: Clozy
@@ -72,96 +57,49 @@ services:
       - key: APP_CURRENCY
         value: USD
 
+      # --- Database: external host, not Render (see note above) ---
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        value: clozy-mysql
+        sync: false
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
-        value: clozy
+        sync: false
       - key: DB_USERNAME
-        value: clozy
+        sync: false
       - key: DB_PASSWORD
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          envVarKey: MYSQL_PASSWORD
+        sync: false
 
       - key: SESSION_DRIVER
         value: database
       - key: QUEUE_CONNECTION
-        value: database
+        value: sync
       - key: CACHE_STORE
         value: file
 
-      # Mail — fill these in with real SMTP credentials (see chat: Gmail
-      # app password, or a transactional provider) before going live.
+      # --- File storage: Cloudflare R2 (S3-compatible) ---
+      - key: FILESYSTEM_DISK
+        value: s3
+      - key: AWS_ACCESS_KEY_ID
+        sync: false
+      - key: AWS_SECRET_ACCESS_KEY
+        sync: false
+      - key: AWS_DEFAULT_REGION
+        value: auto
+      - key: AWS_BUCKET
+        sync: false
+      - key: AWS_ENDPOINT
+        sync: false
+      - key: AWS_URL
+        sync: false
+      - key: AWS_USE_PATH_STYLE_ENDPOINT
+        value: false
+
+      # --- Mail — fill in with real SMTP credentials before going live ---
       - key: MAIL_MAILER
         value: bagisto-dynamic-smtp
       - key: MAIL_FROM_ADDRESS
         sync: false
       - key: MAIL_FROM_NAME
         value: Clozy
-
-  # ---------------------------------------------------------------------
-  # Worker — processes queued jobs (order emails, OTP emails, etc.)
-  # ---------------------------------------------------------------------
-  - type: worker
-    name: clozy-worker
-    env: docker
-    dockerfilePath: docker/render/Dockerfile
-    dockerContext: .
-    dockerCommand: php artisan queue:work --tries=3 --timeout=90 --sleep=3
-    plan: starter
-    envVars:
-      - key: DB_CONNECTION
-        value: mysql
-      - key: DB_HOST
-        value: clozy-mysql
-      - key: DB_PORT
-        value: 3306
-      - key: DB_DATABASE
-        value: clozy
-      - key: DB_USERNAME
-        value: clozy
-      - key: DB_PASSWORD
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          envVarKey: MYSQL_PASSWORD
-      - key: QUEUE_CONNECTION
-        value: database
-      - key: APP_KEY
-        sync: false # copy the same generated value from clozy-web after first deploy
-
-  # ---------------------------------------------------------------------
-  # Cron — Laravel's scheduler, invoked every minute (standard Laravel
-  # pattern: `schedule:run` itself decides what's actually due to fire)
-  # ---------------------------------------------------------------------
-  - type: cron
-    name: clozy-scheduler
-    env: docker
-    dockerfilePath: docker/render/Dockerfile
-    dockerContext: .
-    dockerCommand: php artisan schedule:run
-    schedule: "* * * * *"
-    plan: starter
-    envVars:
-      - key: DB_CONNECTION
-        value: mysql
-      - key: DB_HOST
-        value: clozy-mysql
-      - key: DB_PORT
-        value: 3306
-      - key: DB_DATABASE
-        value: clozy
-      - key: DB_USERNAME
-        value: clozy
-      - key: DB_PASSWORD
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          envVarKey: MYSQL_PASSWORD
-      - key: APP_KEY
-        sync: false # copy the same generated value from clozy-web after first deploy
