@@ -75,10 +75,7 @@ services:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          property: host
+        value: clozy-mysql
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
@@ -121,10 +118,7 @@ services:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          property: host
+        value: clozy-mysql
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
@@ -157,10 +151,7 @@ services:
       - key: DB_CONNECTION
         value: mysql
       - key: DB_HOST
-        fromService:
-          type: pserv
-          name: clozy-mysql
-          property: host
+        value: clozy-mysql
       - key: DB_PORT
         value: 3306
       - key: DB_DATABASE
