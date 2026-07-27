@@ -22,12 +22,19 @@ COPY app ./app
 COPY database ./database
 COPY packages ./packages
 
+
+# --ignore-platform-reqs: the official composer:2 image is a minimal Alpine
+# PHP build and doesn't have ext-calendar/ext-intl/etc. that composer.json
+# requires. Those extensions ARE installed in the runtime stage (below) —
+# this build stage only needs to resolve and download packages, not run
+# any code that uses them.
 RUN composer install \
         --no-dev \
         --no-interaction \
         --prefer-dist \
         --optimize-autoloader \
         --no-scripts \
+        --ignore-platform-reqs \
     && rm -rf /root/.composer/cache
 
 
