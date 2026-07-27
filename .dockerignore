@@ -1,0 +1,36 @@
+.git
+.github
+
+# Local env — real secrets come from Render's dashboard, never baked into the image
+.env
+.env.*
+!.env.example
+
+# Dependencies (reinstalled inside the build stages)
+vendor
+node_modules
+packages/**/node_modules
+
+# Local dev artifacts
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+!storage/logs/.gitignore
+!storage/framework/cache/.gitignore
+!storage/framework/sessions/.gitignore
+!storage/framework/views/.gitignore
+bootstrap/cache/*.php
+
+# Tests / CI / docs
+tests
+packages/**/tests
+.github
+docker/production
+
+# IDE / OS
+.idea
+.vscode
+*.log
+.DS_Store
+Thumbs.db
