@@ -103,7 +103,7 @@
         </a>
 
         <!-- Built With Bagisto -->
-        <div id="app">
+        <div id="app" class="flex min-h-screen flex-col">
             <!-- Flash Message Blade Component -->
             <x-shop::flash-group />
 
@@ -125,7 +125,7 @@
             {!! view_render_event('bagisto.shop.layout.content.before') !!}
 
             <!-- Page Content Blade Component -->
-            <main id="main" class="bg-white">
+            <main id="main" class="flex-1 bg-white">
                 {{ $slot }}
             </main>
 

@@ -1021,6 +1021,8 @@ return [
         'title' => 'Questi sono i risultati per : :query',
         'suggest' => 'Cerca invece',
         'results' => 'Risultati della ricerca',
+        'no-results' => 'Nessun prodotto trovato.',
+        'view-all-results' => 'Vedi tutti i risultati per',
 
         'images' => [
             'index' => [

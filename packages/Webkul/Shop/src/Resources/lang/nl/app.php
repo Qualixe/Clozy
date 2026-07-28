@@ -1021,6 +1021,8 @@ return [
         'title' => 'Dit zijn de resultaten voor : :query',
         'suggest' => 'Zoek in plaats daarvan',
         'results' => 'Zoekresultaten',
+        'no-results' => 'Geen producten gevonden.',
+        'view-all-results' => 'Bekijk alle resultaten voor',
 
         'images' => [
             'index' => [

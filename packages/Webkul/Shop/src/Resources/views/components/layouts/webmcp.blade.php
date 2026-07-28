@@ -6,6 +6,7 @@
     toolname="view_product"
     tooldescription="{{ trans('shop::app.components.layouts.webmcp.view-product') }}"
     toolautosubmit
+    hidden
 >
     <input
         type="text"
@@ -23,6 +24,7 @@
     toolname="add_to_wishlist"
     tooldescription="{{ trans('shop::app.components.layouts.webmcp.add-to-wishlist') }}"
     toolautosubmit
+    hidden
 >
     <input
         type="text"
@@ -40,6 +42,7 @@
     toolname="view_wishlist"
     tooldescription="{{ trans('shop::app.components.layouts.webmcp.view-wishlist') }}"
     toolautosubmit
+    hidden
 >
     <button type="submit" class="hidden" aria-hidden="true"></button>
 </form>
@@ -50,6 +53,7 @@
     toolname="view_cart"
     tooldescription="{{ trans('shop::app.components.layouts.webmcp.view-cart') }}"
     toolautosubmit
+    hidden
 >
     <button type="submit" class="hidden" aria-hidden="true"></button>
 </form>
@@ -60,6 +64,7 @@
     toolname="proceed_to_checkout"
     tooldescription="{{ trans('shop::app.components.layouts.webmcp.proceed-to-checkout') }}"
     toolautosubmit
+    hidden
 >
     <button type="submit" class="hidden" aria-hidden="true"></button>
 </form>

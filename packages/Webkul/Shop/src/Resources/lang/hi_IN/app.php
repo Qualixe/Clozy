@@ -1021,6 +1021,8 @@ return [
         'title' => 'ये :query के लिए परिणाम हैं',
         'suggest' => 'इसके बजाय खोजें',
         'results' => 'खोज परिणाम',
+        'no-results' => 'कोई उत्पाद नहीं मिला।',
+        'view-all-results' => 'इसके लिए सभी परिणाम देखें',
 
         'images' => [
             'index' => [

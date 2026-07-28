@@ -1021,6 +1021,8 @@ return [
         'title' => 'Acestea sunt rezultatele pentru: :query',
         'suggest' => 'Caută în schimb',
         'results' => 'Rezultate căutare',
+        'no-results' => 'Nu s-au găsit produse.',
+        'view-all-results' => 'Vezi toate rezultatele pentru',
 
         'images' => [
             'index' => [

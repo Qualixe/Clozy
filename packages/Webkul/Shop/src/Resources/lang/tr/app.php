@@ -1021,6 +1021,8 @@ return [
         'title' => ':query için sonuçlar',
         'suggest' => 'Bunu mu demek istediniz?',
         'results' => 'Arama Sonuçları',
+        'no-results' => 'Ürün bulunamadı.',
+        'view-all-results' => 'Tüm sonuçları görüntüle:',
 
         'images' => [
             'index' => [

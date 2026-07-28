@@ -57,14 +57,39 @@
                 </div>
             </div>
 
-            <div
-                ref="swiperContainer"
-                class="flex gap-8 pb-2.5 [&>*]:flex-[0] mt-10 overflow-auto scroll-smooth scrollbar-hide max-md:gap-7 max-md:mt-5 max-sm:gap-4 max-md:pb-0 max-md:whitespace-nowrap"
-            >
-                <x-shop::products.card
-                    class="min-w-[291px] max-md:h-fit max-md:min-w-56 max-sm:min-w-[192px]"
-                    v-for="product in products"
-                />
+            <div class="relative">
+                <div
+                    ref="swiperContainer"
+                    class="flex gap-8 pb-2.5 [&>*]:flex-[0] mt-10 overflow-auto scroll-smooth scrollbar-hide max-md:gap-7 max-md:mt-5 max-sm:gap-4 max-md:pb-0 max-md:whitespace-nowrap"
+                >
+                    <x-shop::products.card
+                        class="min-w-[291px] max-md:h-fit max-md:min-w-56 max-sm:min-w-[192px]"
+                        v-for="product in products"
+                    />
+                </div>
+
+                <!-- Mobile-only circular overlay nav buttons, matching the categories carousel style -->
+                <template v-if="products.length > 3">
+                    <span
+                        v-if="products.length > 4 || (products.length > 3 && isScreenMax2xl)"
+                        class="icon-arrow-left-stylish rtl:icon-arrow-right-stylish absolute left-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-black bg-white text-lg transition hover:bg-black hover:text-white max-lg:flex"
+                        role="button"
+                        aria-label="@lang('shop::app.components.products.carousel.previous')"
+                        tabindex="0"
+                        @click="swipeLeft"
+                    >
+                    </span>
+
+                    <span
+                        v-if="products.length > 4 || (products.length > 3 && isScreenMax2xl)"
+                        class="icon-arrow-right-stylish rtl:icon-arrow-left-stylish absolute right-3 top-1/2 hidden h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-black bg-white text-lg transition hover:bg-black hover:text-white max-lg:flex"
+                        role="button"
+                        aria-label="@lang('shop::app.components.products.carousel.next')"
+                        tabindex="0"
+                        @click="swipeRight"
+                    >
+                    </span>
+                </template>
             </div>
 
             <a

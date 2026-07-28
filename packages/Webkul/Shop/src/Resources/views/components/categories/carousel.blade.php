@@ -61,6 +61,7 @@
                 </div>
 
                 <span
+                    v-if="canScroll"
                     class="icon-arrow-left-stylish absolute -left-10 top-9 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full border border-black bg-white text-2xl transition hover:bg-black hover:text-white max-lg:-left-7 max-md:hidden"
                     role="button"
                     aria-label="@lang('shop::components.carousel.previous')"
@@ -70,6 +71,7 @@
                 </span>
 
                 <span
+                    v-if="canScroll"
                     class="icon-arrow-right-stylish absolute -right-6 top-9 flex h-[50px] w-[50px] cursor-pointer items-center justify-center rounded-full border border-black bg-white text-2xl transition hover:bg-black hover:text-white max-lg:-right-7 max-md:hidden"
                     role="button"
                     aria-label="@lang('shop::components.carousel.next')"
@@ -107,12 +109,23 @@
 
                     offset: 323,
 
+                    // Whether the category list actually overflows the visible
+                    // container — the prev/next arrows only make sense (and
+                    // only render) when there's something to scroll to.
+                    canScroll: false,
+
                     fallback: "{{ bagisto_asset('images/small-product-placeholder.webp') }}"
                 };
             },
 
             mounted() {
                 this.getCategories();
+
+                window.addEventListener('resize', this.updateCanScroll);
+            },
+
+            beforeUnmount() {
+                window.removeEventListener('resize', this.updateCanScroll);
             },
 
             methods: {
@@ -122,9 +135,17 @@
                             this.isLoading = false;
 
                             this.categories = response.data.data;
+
+                            this.$nextTick(this.updateCanScroll);
                         }).catch(error => {
                             console.log(error);
                         });
+                },
+
+                updateCanScroll() {
+                    const container = this.$refs.swiperContainer;
+
+                    this.canScroll = !! container && container.scrollWidth > container.clientWidth;
                 },
 
                 swipeLeft() {

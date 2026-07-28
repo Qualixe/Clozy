@@ -1021,6 +1021,8 @@ return [
         'title' => 'Ini adalah hasil untuk : :query',
         'suggest' => 'Cari sebagai gantinya',
         'results' => 'Hasil pencarian',
+        'no-results' => 'Tidak ada produk ditemukan.',
+        'view-all-results' => 'Lihat semua hasil untuk',
 
         'images' => [
             'index' => [

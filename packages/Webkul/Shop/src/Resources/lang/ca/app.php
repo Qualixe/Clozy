@@ -1021,6 +1021,8 @@ return [
         'title' => 'Aquests són els resultats per a : :query',
         'suggest' => 'Cerca en lloc de',
         'results' => 'Resultats de cerca',
+        'no-results' => 'No s\'han trobat productes.',
+        'view-all-results' => 'Veure tots els resultats per a',
 
         'images' => [
             'index' => [

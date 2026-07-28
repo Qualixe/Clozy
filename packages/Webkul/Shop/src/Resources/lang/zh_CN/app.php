@@ -1021,6 +1021,8 @@ return [
         'title' => '这是 :query 的搜索结果',
         'suggest' => '改为搜索',
         'results' => '搜索结果',
+        'no-results' => '未找到产品。',
+        'view-all-results' => '查看所有结果',
 
         'images' => [
             'index' => [

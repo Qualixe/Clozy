@@ -221,8 +221,12 @@
                 name="query"
                 value="{{ request('query') }}"
                 placeholder="@lang('shop::app.components.layouts.header.mobile.search-text')"
+                data-search-autocomplete
+                autocomplete="off"
                 required
             >
+
+            <x-shop::search.autocomplete-results />
 
             @if (core()->getConfigData('catalog.products.settings.image_search'))
                 @include('shop::search.images.index')

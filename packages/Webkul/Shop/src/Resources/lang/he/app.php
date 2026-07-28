@@ -1021,6 +1021,8 @@ return [
         'title' => 'אלה התוצאות עבור : :query',
         'suggest' => 'חפש במקום זאת',
         'results' => 'תוצאות חיפוש',
+        'no-results' => 'לא נמצאו מוצרים.',
+        'view-all-results' => 'הצג את כל התוצאות עבור',
 
         'images' => [
             'index' => [

@@ -1021,6 +1021,8 @@ return [
         'title' => '「:query」の検索結果です',
         'suggest' => '代わりに検索',
         'results' => '検索結果',
+        'no-results' => '商品が見つかりませんでした。',
+        'view-all-results' => 'すべての結果を表示',
 
         'images' => [
             'index' => [

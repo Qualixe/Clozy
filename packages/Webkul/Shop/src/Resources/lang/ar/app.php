@@ -1021,6 +1021,8 @@ return [
         'title' => 'هذه هي النتائج لـ : :query',
         'suggest' => 'ابحث بدلاً من ذلك عن',
         'results' => 'نتائج البحث',
+        'no-results' => 'لم يتم العثور على منتجات.',
+        'view-all-results' => 'عرض كل النتائج لـ',
 
         'images' => [
             'index' => [

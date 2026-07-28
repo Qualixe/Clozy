@@ -83,8 +83,12 @@
                     aria-label="@lang('shop::app.components.layouts.header.desktop.bottom.search-text')"
                     aria-required="true"
                     pattern="[^\\]+"
+                    data-search-autocomplete
+                    autocomplete="off"
                     required
                 >
+
+                <x-shop::search.autocomplete-results />
 
                 <button
                     type="submit"
